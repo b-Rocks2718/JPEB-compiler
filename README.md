@@ -1,6 +1,7 @@
-# My C compiler
+# BCC compiler
 
-My implementation of of the compiler described in [Writing a C Compiler](https://nostarch.com/writing-c-compiler) by Nora Sandler.
+My implementation of of the compiler described in [Writing a C Compiler](https://nostarch.com/writing-c-compiler) by Nora Sandler.  
+Targets the JPEB architecture
 
 ## Usage
 
