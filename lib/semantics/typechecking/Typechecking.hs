@@ -241,7 +241,7 @@ typecheckLocalVar (AST.VariableDclr v type_ mStorage mInit) = do
       lift (Err $ "Initializer on local extern variable declaration for variable " ++ getName v)
     else case lookup v maps of
       Nothing -> do
-        put $ (v, (type_, StaticAttr NoInit True)) : maps -- add v to symbol table
+        put $ replace v (type_, StaticAttr NoInit True) maps -- add v to symbol table
         return (VariableDclr v type_ mStorage Nothing) -- mExpr was Nothing, no need to typecheck
       Just (FunType _ _, _) -> lift (Err $ "Function " ++ v ++ " redeclared as variable")
       Just (oldType, _) ->
@@ -252,15 +252,15 @@ typecheckLocalVar (AST.VariableDclr v type_ mStorage mInit) = do
   else if mStorage == Just Static then
     case isInitConst type_ <$> mInit of
       Just (Just i) -> do -- the expr was constant, so we're good
-        put $ (v, (type_, StaticAttr (Initial i) False)) : maps
+        put $ replace v (type_, StaticAttr (Initial i) False) maps
         e <- liftMaybe (typecheckInit type_) mInit
         return (VariableDclr v type_ mStorage e)
       Just Nothing -> lift (Err $ "Non -constant initializer on local static variable " ++ getName v)
       Nothing -> do -- there was no expr initializer
-        put $ (v, (type_, StaticAttr (Initial $ intStaticInit type_ 0) True)) : maps
+        put $ replace v (type_, StaticAttr (Initial $ intStaticInit type_ 0) True) maps
         return (VariableDclr v type_ mStorage Nothing)
   else do -- it's a local variable, and we need to typecheck the initializer
-    put ((v, (type_, LocalAttr)) : maps)
+    put $ replace v (type_, LocalAttr) maps
     typedInit <- liftMaybe (typecheckInit type_) mInit
     return (VariableDclr v type_ mStorage typedInit)
 

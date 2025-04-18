@@ -37,6 +37,7 @@ data Instr = Return Val
 -- temporary variable type
 data Val   = Constant {getConst :: Const_}
            | Var {getVarName :: String}
+           | Arr String Int
 
 data ExprResult = PlainOperand {getVal :: Val} 
                 | DereferencedPointer {getVal :: Val}
@@ -63,5 +64,6 @@ instance Show TopLevel where
   show (Comment s) = "\n    Comment " ++ show s
 
 instance Show Val where
-  show (Var v) = v
+  show (Var v) = "(Var " ++ v ++ ")"
+  show (Arr v n) = "(Arr " ++ v ++ " " ++ show n ++  ")"
   show (Constant c) = show $ getConstInt c

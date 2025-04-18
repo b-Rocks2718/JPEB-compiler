@@ -114,8 +114,8 @@ varDclrToTAC name (TypedAST.VariableDclr varName type_ mStorage mExpr) = case mE
 arrayInitTAC :: String -> String -> [TypedAST.VarInit] -> Type_ -> Int -> TACState [Instr]
 arrayInitTAC name vName inits type_ n = do
   symbols <- gets getSymbols
-  putSymbols $ (vName, (type_, LocalAttr)) : symbols
-  let dst = Var vName
+  putSymbols $ replace vName (type_, LocalAttr) symbols
+  let dst = Arr vName (typeSize type_)
   case inits of
     x : xs -> do
       case x of

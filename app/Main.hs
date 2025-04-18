@@ -40,9 +40,12 @@ main = do
   when ("-tac" `elem` flags) $ do
     putStrLn ("\nTAC:\n" ++ show tac)
     putStrLn ("\nSymbol Table:\n" ++ showSymbols tacSymbols)
-  let asm = liftA2 progToAsm tac symbols
+  let asmRslt = liftA2 progToAsm tac symbols
+  let asm = fst <$> asmRslt
+  let maps = snd <$> asmRslt
   when ("-asm" `elem` flags) $ do
     putStrLn ("\nAsmAST:\n" ++ show asm)
+    putStrLn ("\nAsmMaps:\n" ++ show maps)
   let asm' = progToMachine <$> asm
   let code = unlines . fmap asmToStr <$> asm'
   showErr code
