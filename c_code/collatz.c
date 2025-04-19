@@ -1,13 +1,38 @@
 unsigned ZERO_CHAR = 48;
+unsigned FRAMEBUFFER_START = 0xE000;
 
-unsigned putchar (unsigned c);
+unsigned RESOLUTION_REG = 0xFFFC;
+
+unsigned putchar (unsigned c){
+  static unsigned cursor_index = 0;
+  static unsigned line_index = 0;
+  unsigned* p = (unsigned*)FRAMEBUFFER_START + 64 * line_index + cursor_index / 2;
+
+  if (c == 10){
+    cursor_index = 0;
+    line_index++;
+    return 0;
+  }
+
+  if (cursor_index & 1) {
+    *p = *p | (c << 8);
+  } else {
+    *p = c;
+  }
+  cursor_index++;
+
+  if (cursor_index >= 40){
+    cursor_index = 0; // go to next line
+    line_index++;
+  }
+}
 
 unsigned print_unisgned(unsigned x){
   unsigned d = x % 10;
   x = x / 10;
   if (x != 0){
     print_unisgned(x);
-  }
+  } 
   putchar(ZERO_CHAR + d);
 }
 
@@ -22,6 +47,8 @@ unsigned collatz(unsigned x){
 }
 
 int main(void) {
+  *(unsigned*)RESOLUTION_REG = 2;
+
   unsigned x = 121;
   unsigned max = x;
   unsigned i = 0;
