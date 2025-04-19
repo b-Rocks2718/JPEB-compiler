@@ -175,8 +175,8 @@ topLevelToMachine (AsmAST.Func name _ instrs) =
   case name of
     -- function prologues
     "main" -> [Label name,
-               Addi sp R0 0,
-               Addi bp R0 0]
+               Addi sp R0 0x9FFF,
+               Addi bp R0 0x9FFF]
     _ -> [Label name,
           Comment "Function Prologue",
           Sw R7 sp (-1),
