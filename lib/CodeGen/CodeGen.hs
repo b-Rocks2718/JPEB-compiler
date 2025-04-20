@@ -89,7 +89,7 @@ toMachineInstr name instr =
       R3 -> [Movi R4 (ImmLabel v), Sw r R3 0]
       _ -> [Movi R3 (ImmLabel v), Sw r R3 0]
     AsmAST.Mov (Reg r) (Memory addr n) -> [Lw r addr n]
-    AsmAST.Mov (Reg r) (Data v) -> [Movi R3 (ImmLabel v), Lw r R3 0]
+    AsmAST.Mov (Reg r) (Data v) -> [Movi r (ImmLabel v), Lw r r 0]
     AsmAST.Push (Reg r) -> [Push r]
     AsmAST.GetAddress (Memory r n) (Memory r' m) -> [Addi R3 r' m, Sw R3 r n]
     AsmAST.GetAddress (Memory r n) (Data s) -> [Movi R3 (ImmLabel s), Sw R3 r n]
