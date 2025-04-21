@@ -1,5 +1,6 @@
 import sys
 import os
+import argparse
 
 valid_commands = ["add", "addi", "addc", "sub",
                   "subc", "and", "or", "xor",
@@ -370,10 +371,10 @@ def generate_opcode(line_num, tokens, labels, label_addresses, address):
         opcode = hex(int(opcode, 2))[2:].zfill(4) + '\n'
     return opcode
 
-def assemble(names, tracked_labels):
+def assemble(args, tracked_labels):
     address = 0
     data = []
-    for name in names:
+    for name in args.inputs:
         input_file = open(name, 'r')
         data += input_file.readlines()
         input_file.close()
@@ -436,7 +437,7 @@ def assemble(names, tracked_labels):
             if opcode != "":
                 file_lines.append(opcode)
 
-    f = open(f"{names[0].split('.')[0]}.out", 'w')
+    f = open(f"{args.output}.hex", 'w')
     for line in file_lines:
         f.write(line)
     f.close()
@@ -446,20 +447,17 @@ def assemble(names, tracked_labels):
 
 # names[0] is main
 # names[1:] are libraries to include       
-def assemble_to_binary(names, tracked_labels = []):
+def assemble_to_binary(args, tracked_labels = []):
 
     bytes_list = []
     
     # generate machine code file
-    assemble(names, tracked_labels)
+    assemble(args, tracked_labels)
     
-    # make output filename from input
-    file_name = names[0].split('.')[0] + ".bin"
-
     # open file
-    input_file = open(names[0].split('.')[0] + ".out", 'r')
+    input_file = open(args.output + ".hex", 'r')
 
-    f = open(file_name, 'wb')
+    f = open(args.output + '.bin', 'wb')
 
     for line in input_file.readlines():
         value = int(line, 16)
@@ -475,5 +473,26 @@ def assemble_to_binary(names, tracked_labels = []):
     f.close()
 
 if __name__ == "__main__":
-    args = sys.argv[1:]
+
+    parser = argparse.ArgumentParser(description ='Assemble to JPEB bin')
+    parser.add_argument(
+        'inputs',
+        nargs='+',
+        help='Files to assemble'
+    )
+    parser.add_argument(
+        '--output',
+        '-o',
+        type=str,
+        help='Path to output to',
+        default=None
+    )
+    args = parser.parse_args()
+
+    if args.output is None:
+        parts = args.inputs[0].split('.')[:-1]
+        args.output = '.'.join(parts)
+    else:
+        args.output += '/' + args.inputs[0].split('/')[-1].split('.')[0]
+
     assemble_to_binary(args)
