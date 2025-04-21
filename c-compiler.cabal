@@ -62,20 +62,20 @@ library
                       Preprocessor,
                       Lexer,
                       Parser,
+                      AST,
+                      TypedAST,
                       Semantics,
                       TAC,
                       AsmGen,
                       CodeGen
 
     -- Modules included in this library but not exported.
-    other-modules:    AST,
-                      ParserUtils,
+    other-modules:    ParserUtils,
                       SemanticsUtils,
                       GotoResolution,
                       LoopResolution,
                       SwitchResolution,
                       IdentifierResolution,
-                      TypedAST,
                       Typechecking,
                       TACAST,
                       TACUtils,

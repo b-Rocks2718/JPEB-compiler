@@ -193,9 +193,10 @@ makeData :: StaticInit -> MachineInstr
 makeData (ZeroInit n) = Space n
 makeData other = Fill . getStaticInit $ other
 
-progToMachine :: AsmAST.Prog -> [MachineInstr]
-progToMachine (AsmAST.Prog topLevels) =
-  [Movi R3 (ImmLabel "main"), Jalr R0 R3] ++ (topLevels >>= topLevelToMachine)
+progToMachine :: Bool -> AsmAST.Prog -> [MachineInstr]
+progToMachine hasMain (AsmAST.Prog topLevels) =
+  (if hasMain then [Movi R3 (ImmLabel "main"), Jalr R0 R3] else [])
+  ++ (topLevels >>= topLevelToMachine)
 
 asmToStr :: MachineInstr -> String
 asmToStr (Label s) = s ++ ":"

@@ -11,6 +11,8 @@ import CodeGen ( progToMachine, asmToStr )
 
 import Control.Monad (when)
 import System.Environment ( getArgs )
+import AST (Type_(FunType))
+import TypedAST (IdentAttrs(FunAttr))
 
 -- run all the compiler stages and write the result
 
@@ -34,6 +36,9 @@ main = do
   when ("-semantics" `elem` flags) $ do
     putStrLn ("\nResolved tree:\n" ++ show (snd <$> resolved))
     putStrLn ("\nSymbol Table:\n" ++ showSymbols symbols)
+  let hasMain = case lookup "main" <$> symbols of
+        Ok (Just (FunType _ _, FunAttr True True)) -> True
+        _ -> False
   let tacRslt = uncurry progToTAC <$> resolved
       tac = snd <$> tacRslt
       tacSymbols = fst <$> tacRslt
@@ -46,7 +51,7 @@ main = do
   when ("-asm" `elem` flags) $ do
     putStrLn ("\nAsmAST:\n" ++ show asm)
     putStrLn ("\nAsmMaps:\n" ++ show maps)
-  let asm' = progToMachine <$> asm
+  let asm' = progToMachine hasMain <$> asm
   let code = unlines . fmap asmToStr <$> asm'
   showErr code
   let fileName = head $ splitOn "." path
