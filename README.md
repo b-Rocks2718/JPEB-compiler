@@ -19,3 +19,6 @@ the output of the corresponding stage.
 
 Other flags: 
 - `-out` if you want to keep the generated `.out` file
+
+Note: 
+Dereferencing global variables does not work correctly. In order to dereference global variable, create a temp local variable.  
