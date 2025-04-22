@@ -161,7 +161,7 @@ def num_bytes(tokens, line):
             return int(tokens[1], 0)
         except ValueError:
             assert False, f"Invalid use of .space in line {line}; correct usage is\".space <num_words>\""
-    elif tokens[0] in ["push", "pop", "kpsh", "kpop", "movi"]:
+    elif tokens[0] in ["push", "pop", "movi"]:
         return 2
     elif tokens[0] in ["call", "swi"]:
         return 3
