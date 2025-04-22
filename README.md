@@ -27,3 +27,6 @@ Older features, like control flow, are pretty thoroughly tested. Newer features,
 The compiler does zero optimizations and the assembly it generates kinda sucks. Eventually I plan to use the TAC IR to build a 
 control flow graph to do optimizations, and I'll write a register allocator.
 
+## Testing
+[Test script](https://github.com/b-Rocks2718/c-compiler/tree/master/test) that compares the compiler + emulator against gcc. still many failing tests to work out
+
