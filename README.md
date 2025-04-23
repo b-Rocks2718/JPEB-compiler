@@ -2,7 +2,8 @@
 
 My implementation of of the compiler described in [Writing a C Compiler](https://nostarch.com/writing-c-compiler) by Nora Sandler.  
 Targets the JPEB architecture.  
-Basically a clone of [My C Compiler](https://github.com/b-Rocks2718/c-compiler). For this project, the compiler was extended to support arrays.
+Basically a clone of [My C Compiler](https://github.com/b-Rocks2718/c-compiler). For this project, the compiler was extended to support arrays.  
+One difference is that this compiler initializes `sp` and `bp` to 0x9FFF instead of 0xFFFF so we don't use the frambuffer for stack space.  
 
 ## Building
 
