@@ -7,38 +7,43 @@
 main:
 	movi r1 40959
 	movi r2 40959
-	addi r1  r1  -2
+	addi r1  r1  -3
 	movi r3 10
 	sw r3  r2  -1
-	movi r3 1
+	movi r3 0
 	sw r3  r2  -2
-	lw r3  r2  -1
-	movi r4 15
+main.for.0.start:
+	movi r3 1
+	sw r3  r2  -3
+	lw r3  r2  -2
+	movi r4 10
 	cmp r3  r4 
-	bg 1
+	bl 1
 	jmp 3
 	movi r3 main.end.1
 	jalr r0  r3 
 	movi r3 0
-	sw r3  r2  -2
+	sw r3  r2  -3
 main.end.1:
-	lw r3  r2  -2
+	lw r3  r2  -3
 	movi r4 0
 	cmp r3  r4 
 	bz 1
 	jmp 3
-	movi r3 main.else.2
+	movi r3 main.for.0.break
 	jalr r0  r3 
-	movi r3 25
-	# Function Epilogue
-	sys EXIT
-	movi r3 main.end.3
+	lw r3  r2  -1
+	lw r4  r2  -2
+	add r3  r3  r4 
+	sw r3  r2  -1
+main.for.0.continue:
+	lw r3  r2  -2
+	movi r4 1
+	add r3  r3  r4 
+	sw r3  r2  -2
+	movi r3 main.for.0.start
 	jalr r0  r3 
-main.else.2:
-	movi r3 35
-	# Function Epilogue
-	sys EXIT
-main.end.3:
+main.for.0.break:
 	movi r3 0
 	# Function Epilogue
 	sys EXIT
