@@ -22,6 +22,7 @@ the output of the corresponding stage.
  - Dereferencing global variables does not work correctly. In order to dereference global variable, create a temp local variable.  
  - Functions that consume too much stack space will not compile. For now, just split things into smaller functions.
  - `void` hasn't been implemented yet. For functions that don't return anything, just declare an `int` return type.
+ - Declaring global variables `static` doesn't actually do anything, so be careful with name collisions. Similarly, the assembler treats all labels as global.
  - Error reporting for the parser sucks. If you make a syntax error, it will not tell you where. Sorry.
 
 Older features, like control flow, are pretty thoroughly tested. Newer features, like pointer and arrays, are still kind of buggy.  
